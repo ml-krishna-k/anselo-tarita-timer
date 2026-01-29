@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+
+  html,
+  body {
+    @apply h-full overflow-hidden bg-stone-50 text-stone-800 antialiased;
+    font-size: 16px;
+  }
+
+  body {
+    /* Safe area for mobile */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom scrollbar hiding if needed */
+::-webkit-scrollbar {
+  display: none;
+}
