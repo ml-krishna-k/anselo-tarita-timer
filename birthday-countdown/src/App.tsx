@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Heart, Music, Sparkles } from 'lucide-react';
 import { useCountdown } from './hooks/useCountdown';
 import leftImg from './assets/hero.png';
 import rightImg from './assets/heroine.png';
+import bgMusic from './assets/music.mpeg?url';
 
 function App() {
   // Configuration
@@ -16,6 +17,32 @@ function App() {
 
   const { days, hours, minutes, seconds, total, isComplete } = useCountdown(dates.target);
   const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize Audio
+  useEffect(() => {
+    audioRef.current = new Audio(bgMusic);
+    audioRef.current.loop = true;
+
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  // Handle Play/Pause
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch((error) => {
+          console.error("Audio playback failed:", error);
+          setIsPlaying(false);
+        });
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
 
   const TOTAL_DURATION = dates.target - dates.start;
 
